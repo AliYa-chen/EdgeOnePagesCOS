@@ -1,38 +1,52 @@
-# ossnbcnm
+# EdgeOne Pages Functions: Cloud Object Storage | COS
 
-This template should help get you started developing with Vue 3 in Vite.
+This example demonstrates how EdgeOne Pages Functions work with GitHub's automatic commit storage and build processes.
 
-## Recommended IDE Setup
+## Deploy
 
-[VS Code](https://code.visualstudio.com/) + [Vue (Official)](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+Live Demo: https://oss.nbcnm.cn
 
-## Recommended Browser Setup
+## Getting Started
 
-- Chromium-based browsers (Chrome, Edge, Brave, etc.):
-  - [Vue.js devtools](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd)
-  - [Turn on Custom Object Formatter in Chrome DevTools](http://bit.ly/object-formatters)
-- Firefox:
-  - [Vue.js devtools](https://addons.mozilla.org/en-US/firefox/addon/vue-js-devtools/)
-  - [Turn on Custom Object Formatter in Firefox DevTools](https://fxdx.dev/firefox-devtools-custom-object-formatters/)
+First, run the development server:
+
+```bash
+edgeone pages dev
+```
+
+Open [http://localhost:8088](http://localhost:8088) with your browser to see the result.
+
+For local dev, please refer to this link:[Edge One document](https://pages.edgeone.ai/document/product-introduction).
+
+You can start editing the page by modifying `app/views/HomeView.vue`. The page auto-updates as you edit the file.
+
+## Learn More
+
+This project uses Vue3 + Vite.
+
+- [Vue Documentation](https://vuejs.org/) - learn about Vue features and API.
+- [Vite Documentation](https://vitejs.dev/guide/) - an interactive Vite tutorial.
 
 ## Customize configuration
 
 See [Vite Configuration Reference](https://vite.dev/config/).
 
-## Project Setup
 
-```sh
-npm install
+
+## Env configuration
+
+Create a `.env` file in the root directory and add the following environment variables:
+
+```env
+owner = your-github-username
+repo = your-github-repo
+branch = your-github-branch
+token = your-github-token
 ```
 
-### Compile and Hot-Reload for Development
+Or refer to this link: [Environment Variables](https://pages.edgeone.ai/document/build-guide#c51018ad-71af-43a6-83af-acbc3690c653),Then use `edgeone pages link` in your project to synchronize your configured environment variables to your local machine.
 
-```sh
-npm run dev
-```
 
-### Compile and Minify for Production
+## Create edgeone pages
 
-```sh
-npm run build
-```
+You can refer to this tutorial link: Import your Git repository address into EdgeOne Pages to create your first EdgeOne Pages site: [Tutorial](https://pages.edgeone.ai/document/importing-a-git-repository)

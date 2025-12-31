@@ -1,5 +1,5 @@
 <script setup>
-import { ref,computed } from 'vue'
+import { ref, computed } from 'vue'
 
 const BASE_URL = window.location.origin
 
@@ -47,8 +47,8 @@ const resources = computed(() => {
 
     res[type].push({
       name,
-      url,        // 👉 已经是 /assets/xxx
-      fullUrl: BASE_URL + url // 👉 public 下不需要 BASE_URL 拼接
+      url,
+      fullUrl: BASE_URL + url
     })
   })
 
@@ -115,11 +115,28 @@ async function upload() {
               text-zinc-900 dark:text-zinc-100 p-6">
 
     <h1 class="mb-8 text-2xl font-bold">📦 Public Assets 资源浏览</h1>
-
     <div class="mb-8">
-      <input type="file" @change="e => file = e.target.files[0]" />
-      <button @click="upload" class="ml-2 px-4 py-2 bg-blue-600 text-white rounded">上传</button>
+      <label for="file-upload"
+        class="flex flex-col items-center justify-center w-full p-6 border-2 border-dashed border-zinc-300 dark:border-zinc-600 rounded-xl cursor-pointer hover:border-indigo-500 hover:bg-indigo-50 dark:hover:bg-zinc-800 transition">
+        <svg class="w-10 h-10 mb-3 text-zinc-400 dark:text-zinc-500" fill="none" stroke="currentColor" stroke-width="2"
+          viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M7 16V4h10v12m-5-5v8"></path>
+        </svg>
+        <span class="text-sm text-zinc-600 dark:text-zinc-400 mb-2">点击或拖拽文件到此处上传</span>
+        <span class="text-xs text-zinc-400 dark:text-zinc-500">支持图片、视频、音频、字体，最大 25MB</span>
+        <input id="file-upload" type="file" class="hidden" @change="e => file = e.target.files[0]" />
+      </label>
+
+      <button @click="upload"
+        class="mt-4 w-full sm:w-auto px-4 py-2 rounded-md bg-indigo-600 text-white font-semibold shadow hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition">
+        上传文件
+      </button>
+
+      <p v-if="file" class="mt-2 text-sm text-zinc-600 dark:text-zinc-400 truncate">
+        当前选择文件: <span class="font-medium">{{ file.name }}</span>
+      </p>
     </div>
+
 
     <!-- 图片 -->
     <section v-if="resources.image.length" class="mb-10 pt-7">
