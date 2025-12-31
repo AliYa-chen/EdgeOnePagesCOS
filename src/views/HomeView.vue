@@ -11,7 +11,8 @@ const modules = import.meta.glob('/src/assets/**/*', {
 const TYPES = {
   image: ['png', 'jpg', 'jpeg', 'gif', 'svg', 'webp'],
   video: ['mp4', 'webm', 'ogg'],
-  audio: ['mp3', 'wav', 'm4a']
+  audio: ['mp3', 'wav', 'm4a'],
+  font: ['ttf', 'otf', 'woff', 'woff2'],
 }
 
 function getType(name) {
@@ -19,11 +20,12 @@ function getType(name) {
   if (TYPES.image.includes(ext)) return 'image'
   if (TYPES.video.includes(ext)) return 'video'
   if (TYPES.audio.includes(ext)) return 'audio'
+  if (TYPES.font.includes(ext)) return 'font'
   return null
 }
 
 const resources = computed(() => {
-  const res = { image: [], video: [], audio: [] }
+  const res = { image: [], video: [], audio: [], font: [] }
 
   Object.entries(modules).forEach(([path, url]) => {
     const name = path.replace('/src/assets/', '')
@@ -52,8 +54,8 @@ async function copyLink(url) {
     <h1 class="mb-8 text-2xl font-bold">📦 Assets 资源浏览</h1>
 
     <!-- 图片 -->
-    <section v-if="resources.image.length" class="mb-10">
-      <h2 class="mb-4 text-xl font-semibold">🖼 图片</h2>
+    <section v-if="resources.image.length" class="mb-10 pt-7">
+      <h2 class="mb-4 text-xl font-semibold pb-3">🖼 图片</h2>
       <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
         <div v-for="item in resources.image" :key="item.name" @click="copyLink(item.fullUrl)" class="cursor-pointer rounded-xl border border-zinc-200 dark:border-zinc-700
                  bg-white dark:bg-zinc-800 p-3 transition hover:shadow-lg">
@@ -66,8 +68,8 @@ async function copyLink(url) {
     </section>
 
     <!-- 视频 -->
-    <section v-if="resources.video.length" class="mb-10">
-      <h2 class="mb-4 text-xl font-semibold">🎬 视频</h2>
+    <section v-if="resources.video.length" class="mb-10 pt-7">
+      <h2 class="mb-4 text-xl font-semibold pb-3">🎬 视频</h2>
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         <div v-for="item in resources.video" :key="item.name" @click="copyLink(item.fullUrl)" class="cursor-pointer rounded-xl border border-zinc-200 dark:border-zinc-700
                  bg-white dark:bg-zinc-800 p-3 transition hover:shadow-lg">
@@ -80,8 +82,8 @@ async function copyLink(url) {
     </section>
 
     <!-- 音乐 -->
-    <section v-if="resources.audio.length">
-      <h2 class="mb-4 text-xl font-semibold">🎵 音乐</h2>
+    <section v-if="resources.audio.length" class="mb-10 pt-7">
+      <h2 class="mb-4 text-xl font-semibold pb-3">🎵 音乐</h2>
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
         <div v-for="item in resources.audio" :key="item.name" @click="copyLink(item.fullUrl)" class="cursor-pointer rounded-xl border border-zinc-200 dark:border-zinc-700
                  bg-white dark:bg-zinc-800 p-3 transition hover:shadow-lg">
@@ -90,6 +92,23 @@ async function copyLink(url) {
               🎧 {{ item.name }}
             </div>
             <audio :src="item.url" controls class="w-full" />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 字体 -->
+    <section v-if="resources.font.length" class="mb-10 pt-7">
+      <h2 class="mb-4 text-xl font-semibold pb-3">🔤 字体</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        <div v-for="item in resources.font" :key="item.name" @click="copyLink(item.fullUrl)" class="cursor-pointer rounded-xl border border-zinc-200 dark:border-zinc-700
+                 bg-white dark:bg-zinc-800 p-4 transition hover:shadow-lg
+                 flex items-center justify-center h-36">
+          <div class="text-center">
+            <div class="text-2xl mb-2">🔠</div>
+            <div class="truncate text-xs font-mono text-zinc-600 dark:text-zinc-400">
+              {{ item.name }}
+            </div>
           </div>
         </div>
       </div>
