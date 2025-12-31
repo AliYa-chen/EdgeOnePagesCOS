@@ -1,13 +1,17 @@
 <script setup>
 import { computed } from 'vue'
 
-const BASE_URL = window.location.origin
-
-const modules = import.meta.glob('/src/assets/**/*', {
+/**
+ * 扫描 public/assets
+ */
+const modules = import.meta.glob('/public/assets/**/*', {
   eager: true,
   as: 'url'
 })
 
+/**
+ * 资源类型
+ */
 const TYPES = {
   image: ['png', 'jpg', 'jpeg', 'gif', 'svg', 'webp'],
   video: ['mp4', 'webm', 'ogg'],
@@ -24,18 +28,22 @@ function getType(name) {
   return null
 }
 
+/**
+ * 分组资源
+ */
 const resources = computed(() => {
   const res = { image: [], video: [], audio: [], font: [] }
 
   Object.entries(modules).forEach(([path, url]) => {
-    const name = path.replace('/src/assets/', '')
+    // /public/assets/xxx → assets/xxx
+    const name = path.replace('/public/assets/', '')
     const type = getType(name)
     if (!type) return
 
     res[type].push({
       name,
-      url,
-      fullUrl: BASE_URL + url
+      url,        // 👉 已经是 /assets/xxx
+      fullUrl: url // 👉 public 下不需要 BASE_URL 拼接
     })
   })
 
@@ -50,8 +58,9 @@ async function copyLink(url) {
 
 <template>
   <div class="min-h-screen bg-zinc-50 dark:bg-zinc-900
-           text-zinc-900 dark:text-zinc-100 p-6">
-    <h1 class="mb-8 text-2xl font-bold">📦 Assets 资源浏览</h1>
+              text-zinc-900 dark:text-zinc-100 p-6">
+
+    <h1 class="mb-8 text-2xl font-bold">📦 Public Assets 资源浏览</h1>
 
     <!-- 图片 -->
     <section v-if="resources.image.length" class="mb-10 pt-7">
@@ -59,7 +68,8 @@ async function copyLink(url) {
       <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
         <div v-for="item in resources.image" :key="item.name" @click="copyLink(item.fullUrl)" class="cursor-pointer rounded-xl border border-zinc-200 dark:border-zinc-700
                  bg-white dark:bg-zinc-800 p-3 transition hover:shadow-lg">
-          <img :src="item.url" class="h-36 w-full object-contain rounded-md bg-zinc-100 dark:bg-zinc-700" />
+          <img :src="item.url" class="h-36 w-full object-contain rounded-md
+                   bg-zinc-100 dark:bg-zinc-700" />
           <div class="mt-2 truncate text-xs text-zinc-600 dark:text-zinc-400">
             {{ item.name }}
           </div>
@@ -113,5 +123,6 @@ async function copyLink(url) {
         </div>
       </div>
     </section>
+
   </div>
 </template>
