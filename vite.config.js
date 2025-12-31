@@ -18,8 +18,6 @@ export default defineConfig({
     },
   },
   build: {
-    rollupOptions: {
-      external: [/\.mp4$/] // 防止被解析
-    }
+    copyPublicDir: false
   }
 })
