@@ -87,7 +87,7 @@ async function upload() {
   })
 
   try {
-    const res = await fetch('/functions/github-upload', {
+    const res = await fetch('/api/filepush', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
