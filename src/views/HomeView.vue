@@ -3,6 +3,9 @@ import { computed } from 'vue'
 
 const BASE_URL = window.location.origin
 
+const file = ref(null)
+const MAX_SIZE_MB = 25
+
 /**
  * 扫描 public/assets
  */
@@ -56,6 +59,55 @@ async function copyLink(url) {
   await navigator.clipboard.writeText(url)
   alert('已复制资源链接')
 }
+
+async function upload() {
+  if (!file.value) {
+    alert('请选择文件')
+    return
+  }
+
+  // 文件大小限制
+  const sizeMB = file.value.size / 1024 / 1024
+  if (sizeMB > MAX_SIZE_MB) {
+    alert(`文件过大，最大支持 ${MAX_SIZE_MB} MB`)
+    return
+  }
+
+  // 使用 FileReader 生成 base64
+  const base64 = await new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    reader.onload = () => {
+      // 读取结果是 data:<mime>;base64,<base64>
+      // 我们只取 base64 部分
+      const result = reader.result.split(',')[1]
+      resolve(result)
+    }
+    reader.onerror = () => reject(reader.error)
+    reader.readAsDataURL(file.value)
+  })
+
+  try {
+    const res = await fetch('/functions/github-upload', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name: file.value.name,
+        content: base64,
+      }),
+    })
+
+    const data = await res.json()
+    if (data.content?.path) {
+      alert(`上传成功: ${data.content.path}`)
+    } else {
+      alert(`上传失败: ${data.error || JSON.stringify(data)}`)
+    }
+  } catch (err) {
+    console.error(err)
+    alert('上传失败，请重试')
+  }
+}
+
 </script>
 
 <template>
@@ -63,6 +115,11 @@ async function copyLink(url) {
               text-zinc-900 dark:text-zinc-100 p-6">
 
     <h1 class="mb-8 text-2xl font-bold">📦 Public Assets 资源浏览</h1>
+
+    <div class="mb-8">
+      <input type="file" @change="e => file = e.target.files[0]" />
+      <button @click="upload" class="ml-2 px-4 py-2 bg-blue-600 text-white rounded">上传</button>
+    </div>
 
     <!-- 图片 -->
     <section v-if="resources.image.length" class="mb-10 pt-7">
