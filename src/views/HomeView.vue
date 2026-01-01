@@ -97,20 +97,12 @@ async function upload() {
   uploading.value = true
 
   try {
-    const base64 = await new Promise((resolve, reject) => {
-      const reader = new FileReader()
-      reader.onload = () => resolve(reader.result.split(',')[1])
-      reader.onerror = reject
-      reader.readAsDataURL(file.value)
-    })
+    const formData = new FormData()
+    formData.append('file', file.value)
 
     const res = await fetch('/api/filepush', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        name: file.value.name,
-        content: base64,
-      }),
+      body: formData,
     })
 
     const data = await res.json()
@@ -124,9 +116,8 @@ async function upload() {
     buildWaiting.value = true
 
     // 开始不停轮询
-    await pollBuildStatus() 
+    await pollBuildStatus()
 
-    // 编译完成 → 刷新页面或提示
     buildWaiting.value = false
     alert('资源编译完成！页面即将刷新')
     location.reload()
