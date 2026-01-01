@@ -104,7 +104,7 @@ async function upload() {
   })
 
   await pollBuildStatus()
-  // location.reload()
+  location.reload()
 }
 
 
