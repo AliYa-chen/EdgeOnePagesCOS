@@ -1,6 +1,17 @@
-export async function onRequest() {
+export async function onRequest({ request, env }) {
+
+  if (request.method !== 'POST') {
+    return new Response('Method Not Allowed', { status: 405 })
+  }
+
+
   const TENCENT_API = "https://console.cloud.tencent.com/cgi/capi";
-  const PROJECT_ID = "pages-5h7pjoaakgaq";
+  const PROJECT_ID = env.PROJECT_ID;
+  const UIN = env.UIN;
+  const SKEY = env.SKEY;
+  const CSRF_CODE = env.CSRF_CODE;
+  const X_Lid = env.X_LID;
+  const X_Life = env.X_LIFE;
 
   // query 参数
   const query = new URLSearchParams({
@@ -13,18 +24,18 @@ export async function onRequest() {
     withLanguage: "1",
     sts: "1",
     t: Date.now().toString(),      // 动态时间戳
-    uin: "100007990988",
-    ownerUin: "100007990988",
-    csrfCode: "1948106127"
+    uin: `${UIN}`,
+    ownerUin: `${UIN}`,
+    csrfCode: `${CSRF_CODE}`
   });
 
   const headers = {
     "Origin": "https://console.cloud.tencent.com",
-    "Referer": "https://console.cloud.tencent.com/edgeone/pages/project/pages-5h7pjoaakgaq/index",
-    "X-Lid": "yJz69bpBY",
-    "X-Life": "3503406",
+    "Referer": `https://console.cloud.tencent.com/edgeone/pages/project/${PROJECT_ID}/index`,
+    "X-Lid": `${X_Lid}`,
+    "X-Life": `${X_Life}`,
     "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)",
-    "Cookie": "uin=o100007990988;skey=E5RqNSQtFIzzZt-inxddSGuYsGKp4JMbiNlSwYLL2Fs_; nodesess=7de21131-9835-5cc1-dc33-d18b03c70928",
+    "Cookie": `uin=o${UIN};skey=${SKEY}; `,
     "Content-Type": "application/json",
     "Accept": "*/*",
     "Connection": "keep-alive"

@@ -42,6 +42,15 @@ OWNER = your-github-username
 REPO = your-github-repo
 BRANCH = your-github-branch
 GITHUB_TOKEN = your-github-token
+
+|----- Tencent EdgeOne Pages Environment Variables -----|
+
+PROJECT_ID= your-edgeone-project-id
+UIN= your-tencent-uin
+SKEY= your-tencent-skey
+CSRF_CODE= your-tencent-csrf-code
+X_LID= your-tencent-x-lid
+X_LIFE= your-tencent-x-life
 ```
 
 GitHub Tokens: You can create a personal access token in your GitHub account settings. Ensure you grant the necessary repository access permissions. We recommend selecting "Fine-grained tokens," then choosing `"Actions"`,`"Contents"`, `"Metadata"`, `"Workflows"` and granting read and write permissions.
