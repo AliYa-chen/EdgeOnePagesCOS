@@ -62,19 +62,13 @@ async function copyLink(url) {
   alert('已复制资源链接')
 }
 
-async function pollBuildStatus(interval = 2000, timeout = 60000) {
-  const start = Date.now()
-
+async function pollBuildStatus() {
   return new Promise((resolve, reject) => {
     const timer = setInterval(async () => {
-      if (Date.now() - start > timeout) {
-        clearInterval(timer)
-        reject(new Error('轮询超时'))
-        return
-      }
-
       try {
-        const res = await fetch('/api/getstatus')
+        const res = await fetch('/api/getstatus', {
+          method: 'POST'
+        })
         const data = await res.json()
 
         if (data.usedInProd) {
@@ -84,7 +78,7 @@ async function pollBuildStatus(interval = 2000, timeout = 60000) {
       } catch (err) {
         console.error('轮询失败', err)
       }
-    }, interval)
+    }, 2000) // 每 2 秒轮询一次
   })
 }
 
@@ -129,8 +123,8 @@ async function upload() {
     uploading.value = false
     buildWaiting.value = true
 
-    // 开始轮询
-    await pollBuildStatus(2000, 120000) // 每 2 秒轮询，最多 2 分钟
+    // 开始不停轮询
+    await pollBuildStatus() 
 
     // 编译完成 → 刷新页面或提示
     buildWaiting.value = false
@@ -144,6 +138,7 @@ async function upload() {
     alert('上传或轮询失败，请重试')
   }
 }
+
 
 
 
